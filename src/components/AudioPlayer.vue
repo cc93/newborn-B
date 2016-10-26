@@ -19,65 +19,28 @@
         top: 32px;
     }
 
-    .cc-sound-wave-box {
+    .audio-player-sound-wave-box {
         width:30px;
         height:30px;
         left: 240px;
         top: 27px;
     }
 
-    .cc-sound-wave1{
+    .audio-player-sound-wave1{
         left:0;
         top:5px;
     }
 
-    .cc-sound-wave2{
+    .audio-player-sound-wave2{
         left:6px;
         top:3px;
     }
 
-    .cc-sound-wave3{
+    .audio-player-sound-wave3{
         left:15px;
         top:0;
     }
-    @keyframes cc-sound-wave
-    {
-        0% {
-            background: none;
-        }
-        25% {
-            background: url(../../img/6_s2.png) 0 5px no-repeat;
-        }
-        50%{
-            background: url(../../img/6_s2.png) 0 5px no-repeat,url(../../img/6_s3.png) 6px 3px no-repeat;
-        }
-        75%{
-            background: url(../../img/6_s2.png) 0 5px no-repeat,url(../../img/6_s3.png) 6px 3px no-repeat,url(../../img/6_s4.png) 15px 0 no-repeat;
-        }
-        100%{
-            background: none;
-        }
-    }
-
-    @-webkit-keyframes cc-sound-wave
-    {
-        0% {
-            background: none;
-        }
-        25% {
-            background: url(../../img/6_s2.png) 0 5px no-repeat;
-        }
-        50%{
-            background: url(../../img/6_s2.png) 0 5px no-repeat,url(../../img/6_s3.png) 6px 3px no-repeat;
-        }
-        75%{
-            background: url(../../img/6_s2.png) 0 5px no-repeat,url(../../img/6_s3.png) 6px 3px no-repeat,url(../../img/6_s4.png) 15px 0 no-repeat;
-        }
-        100%{
-            background: none;
-        }
-    }
-
+    
     .audio-player-progress-bar-box {
         width: 281px;
         height: 9px;
@@ -98,19 +61,18 @@
         <img src="../../img/6_line1.png" alt="" class="audio-player-blue-box pa">
         <img src="../../img/6_line2.png" alt="" class="audio-player-white-box pa">
         <img src="../../img/6_s1.png" alt="" class="audio-player-speaker pa" @click="isPlay=!isPlay">
-        <div class="cc-sound-wave-box pa" v-show="isPlay">
-            <img src="../../img/6_s2.png" alt="" class="cc-sound-wave1 pa" v-show="soundWaveFrame>=2">
-            <img src="../../img/6_s3.png" alt="" class="cc-sound-wave2 pa" v-show="soundWaveFrame>=3">
-            <img src="../../img/6_s4.png" alt="" class="cc-sound-wave3 pa" v-show="soundWaveFrame>=4">
+        <div class="audio-player-sound-wave-box pa" v-show="isPlay">
+            <img src="../../img/6_s2.png" alt="" class="audio-player-sound-wave1 pa" v-show="soundWaveFrame>=2">
+            <img src="../../img/6_s3.png" alt="" class="audio-player-sound-wave2 pa" v-show="soundWaveFrame>=3">
+            <img src="../../img/6_s4.png" alt="" class="audio-player-sound-wave3 pa" v-show="soundWaveFrame>=4">
         </div>
-        <audio v-el:audio @canplay="canPlay=true">
+        <audio v-el:audio @canplay="canPlay=true" @play="onPlay">
             <source :src="src" type="audio/mpeg">
             Your browser does not support HTML5 audio.
         </audio>
         <div class="audio-player-progress-bar-box pa">
             <progress-bar id="audio-player-progress-bar"
-                          :progress.sync="progress" @on-progress-updated="progressUpdated" :bar-show="false"
-                          :clickable="false">
+                          :progress.sync="progress" :bar-show="false" :clickable="false">
             </progress-bar>
         </div>
         <div class="audio-player-current-time pa">{{currentTimeStr}}</div>
@@ -128,6 +90,12 @@
             isPlay: {
                 type: Boolean,
                 default: false
+            },
+            playingAudioVm:{
+                type:Object,
+                default:function () {
+                    return {}
+                }
             }
         },
         data: function () {
@@ -152,7 +120,6 @@
                         }, 500);
                     } else {
                         this.doPlay();
-
                     }
                 } else {
                     this.reset();
@@ -179,13 +146,9 @@
                 }
             },
             doPlay(){
-                var audioEls = document.getElementsByTagName('audio');
-                for(var i =0;i<audioEls.length;i++){
-                    if(audioEls[i] !== this.audioEl){
-                        //停止其他音频，保证一次只能播放一个音频
-                        audioEls[i].pause();
-                        audioEls[i].currentTime = 0
-                    }
+                //停止其他音频，保证一次只能播放一个音频
+                if(this.playingAudioVm){
+                   this.playingAudioVm.isPlay = false 
                 }
                 this.audioEl.play();
                 this.currentTimeUpdateIntervalId = setInterval(()=> {
@@ -198,7 +161,10 @@
                     if(this.soundWaveFrame>4){
                         this.soundWaveFrame =1;
                     }
-                },500);
+                },300);
+            },
+            onPlay(e){
+                this.$emit('on-play',this);
             },
             formatTime(second) {
                 var sec = 0;
@@ -213,11 +179,6 @@
                 }
                 strMin = min;
                 return strMin + ':' + strSec;
-            },
-            progressUpdated(progress) {
-                if (!this.isPlay) {
-                    this.isPlay = true;
-                }
             },
             reset(){
                 clearInterval(this.currentTimeUpdateIntervalId);

@@ -401,38 +401,17 @@
                 </div>
                 <div class="p1-body">
                     <div class="p1-pic1-box">
-                        <img src="../../img/1_pic1.jpg" alt="" class="p1-pic1"
-                             v-show="currentPage>=1"
-                             v-anim="{animation:'p1-pic1 2s ease 1',frames:[
-                        {opacity:0.3,scale:.9999},{opacity:1},{},{scale:1.1},'%'] }">
+                        <img src="../../img/1_pic1.jpg" alt="" class="p1-pic1">
                     </div>
 
-                    <img src="../../img/1_copy2.png" alt="" class="p1-copy2 pa"
-                         v-show="currentPage>=1"
-                         transition="p1-copy2" v-trans="{
-                        transition:{transition:'all .9s cubic-bezier(0.68, -0.55, 0.27, 1.55) .1s'},
-                        enter:{y:10,opacity:.5},
-                        leave:{},
-                        ext:'%'}">
+                    <img src="../../img/1_copy2.png" alt="" class="p1-copy2 pa">
                     <timeline class="p1-timeline pa"
                               :start-time="0"
                               :end-time="20"
                               :run="currentPage==1">
                     </timeline>
-                    <img src="../../img/1_copy3.png" alt="" class="p1-copy3 pa"
-                         v-show="currentPage>=1"
-                         transition="p1-copy3" v-trans="{
-                        transition:{transition:'all .3s ease .3s'},
-                        enter:{y:5,opacity:0},
-                        leave:{},
-                        ext:'%'}">
-                    <img src="../../img/1_copy4.png" alt="" class="p1-copy4 pa"
-                         v-show="currentPage>=1"
-                         transition="p1-copy4" v-trans="{
-                        transition:{transition:'all .7s ease .5s'},
-                        enter:{y:5,opacity:0},
-                        leave:{},
-                        ext:'%'}">
+                    <img src="../../img/1_copy3.png" alt="" class="p1-copy3 pa">
+                    <img src="../../img/1_copy4.png" alt="" class="p1-copy4 pa">
                 </div>
             </div>
             <div id="page2" class="page bg-lightblue">
@@ -448,22 +427,9 @@
                               :end-time="40"
                               :run="currentPage==2">
                     </timeline>
-                    <img src="../../img/2_copy2.png" alt="" class="p2-copy2 pa" v-show="currentPage>=2"
-                         v-show="currentPage>=2"
-                         v-anim="{animation:'p2-copy2 .3s ease 1',frames:[
-                        {y:-10,scale:0.9,opacity:0},{y:0,rotate:4,scale:1,opacity:1},{rotate:-4},{rotate:0},'%'] }">
-
-                    <img src="../../img/2_copy3.png" alt="" class="p2-copy3 pa"
-                         v-show="currentPage>=2"
-                         transition="p2-copy3" v-trans="{
-                        transition:{transition:'all .7s ease .2s'},
-                        enter:{y:10,opacity:0},
-                        leave:{},
-                        ext:'%'}">
-                    <div class="p2-sponsor-arrow pa"
-                         v-show="currentPage>=2"
-                         v-anim="{animation:'p2-sponsor 1.2s ease',frames:[
-                        {x:-10},{x:10},'%'] }">
+                    <img src="../../img/2_copy2.png" alt="" class="p2-copy2 pa" >
+                    <img src="../../img/2_copy3.png" alt="" class="p2-copy3 pa">
+                    <div class="p2-sponsor-arrow pa">
                         &gt;&gt;
                     </div>
                     <a :href="sponseHref">
@@ -484,24 +450,9 @@
                               :end-time="60"
                               :run="currentPage==3">
                     </timeline>
-                    <img src="../../img/3_copy1.png" alt="" class="p3-copy1 pa"
-                         v-show="currentPage>=3"
-                         transition="p3-copy1" v-trans="{
-                        transition:{transition:'all .7s ease'},
-                        enter:{y:5,opacity:0},
-                        leave:{},
-                        ext:'%'}">
-                    <img src="../../img/3_copy2.png" alt="" class="p3-copy2 pa"
-                         v-show="currentPage>=3"
-                         transition="p3-copy2" v-trans="{
-                        transition:{transition:'all .7s ease .2s'},
-                        enter:{y:10,opacity:0},
-                        leave:{},
-                        ext:'%'}">
-                    <div class="p2-sponsor-arrow pa"
-                         v-show="currentPage>=3"
-                         v-anim="{animation:'p2-sponsor 1.2s ease',frames:[
-                        {x:-10},{x:10},'%'] }">
+                    <img src="../../img/3_copy1.png" alt="" class="p3-copy1 pa">
+                    <img src="../../img/3_copy2.png" alt="" class="p3-copy2 pa">
+                    <div class="p2-sponsor-arrow pa">
                         &gt;&gt;
                     </div>
                     <a :href="sponseHref">
@@ -516,35 +467,11 @@
                     <img src="../../img/logo_1.png" alt="" class="logo pa">
                 </div>
                 <div class="p4-body">
-                    <img src="../../img/4_copy1.png" alt="" class="p4-copy1 pa"
-                         v-show="currentPage>=4"
-                         transition="p4-copy1" v-trans="{
-                        transition:{transition:'all .3s ease'},
-                        enter:{y:3,opacity:0},
-                        leave:{},
-                        ext:'%'}">
-                    <img src="../../img/4_copy2.png" alt="" class="p4-copy2 pa"
-                         v-show="currentPage>=4"
-                         transition="p4-copy2" v-trans="{
-                        transition:{transition:'all .7s ease .2s'},
-                        enter:{y:5,opacity:0},
-                        leave:{},
-                        ext:'%'}">
-                    <img src="../../img/4_copy3.png" alt="" class="p4-copy3 pa"
-                         v-show="currentPage>=4"
-                         transition="p4-copy3" v-trans="{
-                        transition:{transition:'all .7s ease .7s'},
-                        enter:{y:10,scale:1.1,opacity:0},
-                        leave:{},
-                        ext:'%'}">
+                    <img src="../../img/4_copy1.png" alt="" class="p4-copy1 pa">
+                    <img src="../../img/4_copy2.png" alt="" class="p4-copy2 pa">
+                    <img src="../../img/4_copy3.png" alt="" class="p4-copy3 pa">
                     <a :href="sponseHref">
-                        <img src="../../img/4_btn.png" alt="" class="p4-btn pa"
-                             v-show="currentPage>=4"
-                             transition="p4-btn" v-trans="{
-                        transition:{transition:'all .9s ease 1.3s'},
-                        enter:{y:50,opacity:0},
-                        leave:{},
-                        ext:'%'}">
+                        <img src="../../img/4_btn.png" alt="" class="p4-btn pa">
                     </a>
                 </div>
             </div>
@@ -555,23 +482,11 @@
                 <div class="p5-body">
                     <img src="../../img/6_pic1.jpg" alt="" class="p5-pic1 pa">
                     <audio-player class="p5-audio-player pa"
-                                  src="./audio/p5-audio.mp3">
+                                  src="./audio/p5-audio.mp3" @on-play="setPlayingAudioVm" :playing-audio-vm="playingAudioVm">
                     </audio-player>
-                    <img src="../../img/6_copy2.png" alt="" class="p5-copy2 pa"
-                         v-show="currentPage>=5"
-                         transition="p5-copy2" v-trans="{
-                        transition:{transition:'all .7s ease'},
-                        enter:{y:5,opacity:0},
-                        leave:{},
-                        ext:'%'}">
+                    <img src="../../img/6_copy2.png" alt="" class="p5-copy2 pa">
 
-                    <img src="../../img/6_copy3.png" alt="" class="p5-copy3 pa"
-                         v-show="currentPage>=5"
-                         transition="p5-copy3" v-trans="{
-                        transition:{transition:'all 1.1s ease .5s'},
-                        enter:{y:10,opacity:0},
-                        leave:{},
-                        ext:'%'}">
+                    <img src="../../img/6_copy3.png" alt="" class="p5-copy3 pa">
                 </div>
                 <div class="p5-foot bg-lightblue pa">
                     <a :href="sponseHref">
@@ -585,17 +500,8 @@
                     <img src="../../img/7_pic1.jpg" alt="" class="p5-pic1 pa">
                 </div>
                 <div class="p6-body">
-                    <img src="../../img/7_copy2.png" alt="" class="p6-copy2 pa"
-                         v-show="currentPage>=6"
-                         transition="p6-copy2" v-trans="{
-                        transition:{transition:'all .7s ease'},
-                        enter:{y:10,opacity:0},
-                        leave:{},
-                        ext:'%'}">
-                    <div class="p6-sponsor-arrow pa"
-                         v-show="currentPage>=6"
-                         v-anim="{animation:'p2-sponsor 1.2s ease',frames:[
-                        {x:-10},{x:10},'%'] }">
+                    <img src="../../img/7_copy2.png" alt="" class="p6-copy2 pa">
+                    <div class="p6-sponsor-arrow pa">
                         &gt;&gt;
                     </div>
                     <a :href="sponseHref">
@@ -611,24 +517,9 @@
                 </div>
                 <div class="p7-body">
                     <img src="../../img/8_pic1.jpg" alt="" class="p7-pic1 pa">
-                    <img src="../../img/8_copy2.png" alt="" class="p7-copy2 pa"
-                         v-show="currentPage>=7"
-                         transition="p7-copy2" v-trans="{
-                        transition:{transition:'all .7s ease'},
-                        enter:{y:5,opacity:0},
-                        leave:{},
-                        ext:'%'}">
-                    <img src="../../img/8_copy3.png" alt="" class="p7-copy3 pa"
-                         v-show="currentPage>=7"
-                         transition="p7-copy3" v-trans="{
-                        transition:{transition:'all .9s ease .3s'},
-                        enter:{y:10,opacity:0},
-                        leave:{},
-                        ext:'%'}">
-                    <div class="p6-sponsor-arrow pa"
-                         v-show="currentPage>=7"
-                         v-anim="{animation:'p2-sponsor 1.2s ease',frames:[
-                        {x:-10},{x:10},'%'] }">
+                    <img src="../../img/8_copy2.png" alt="" class="p7-copy2 pa">
+                    <img src="../../img/8_copy3.png" alt="" class="p7-copy3 pa">
+                    <div class="p6-sponsor-arrow pa">
                         &gt;&gt;
                     </div>
                     <a :href="sponseHref">
@@ -644,13 +535,7 @@
                 </div>
                 <div class="p8-body">
                     <img src="../../img/9_pic1.jpg" alt="" class="p8-pic1 pa">
-                    <img src="../../img/9_copy2.png" alt="" class="p8-copy2 pa"
-                         v-show="currentPage>=8"
-                         transition="p8-copy2" v-trans="{
-                        transition:{transition:'all .9s ease'},
-                        enter:{y:10,opacity:0},
-                        leave:{},
-                        ext:'%'}">
+                    <img src="../../img/9_copy2.png" alt="" class="p8-copy2 pa">
                 </div>
                 <div class="p8-foot bg-darkblue pa">
                     <a :href="sponseHref">
@@ -665,31 +550,13 @@
                 <div class="p9-body">
                     <img src="../../img/10_pic1.jpg" alt="" class="p9-pic1 pa">
                     <div class="p9-copy2-box bg-darkblue pa">
-                        <img src="../../img/10_copy2.png" alt="" class="p9-copy2 pa"
-                             v-show="currentPage>=9"
-                             transition="p9-copy2" v-trans="{
-                        transition:{transition:'all .5s ease'},
-                        enter:{y:5,opacity:0},
-                        leave:{},
-                        ext:'%'}">
+                        <img src="../../img/10_copy2.png" alt="" class="p9-copy2 pa">
                     </div>
                     <audio-player class="p9-audio-player pa"
-                                  src="./audio/p9-audio.mp3">
+                                  src="./audio/p9-audio.mp3" @on-play="setPlayingAudioVm" :playing-audio-vm="playingAudioVm">
                     </audio-player>
-                    <img src="../../img/10_copy3.png" alt="" class="p9-copy3 pa"
-                         v-show="currentPage>=9"
-                         transition="p9-copy3" v-trans="{
-                        transition:{transition:'all .5s ease .3s'},
-                        enter:{y:5,opacity:0},
-                        leave:{},
-                        ext:'%'}">
-                    <img src="../../img/10_copy4.png" alt="" class="p9-copy4 pa"
-                         v-show="currentPage>=9"
-                         transition="p9-copy4" v-trans="{
-                        transition:{transition:'all .7s ease .7s'},
-                        enter:{y:10,opacity:0},
-                        leave:{},
-                        ext:'%'}">
+                    <img src="../../img/10_copy3.png" alt="" class="p9-copy3 pa">
+                    <img src="../../img/10_copy4.png" alt="" class="p9-copy4 pa">
                 </div>
                 <div class="p8-foot bg-darkblue pa">
                     <a :href="sponseHref">
@@ -702,43 +569,16 @@
                     <img src="../../img/logo_1.png" alt="" class="logo pa">
                 </div>
                 <div class="p4-body">
-                    <img src="../../img/4_copy1.png" alt="" class="p4-copy1 pa"
-                         v-show="currentPage>=10"
-                         transition="p10-copy1" v-trans="{
-                        transition:{transition:'all .5s ease'},
-                        enter:{y:5,opacity:0},
-                        leave:{},
-                        ext:'%'}">
-                    <img src="../../img/11_copy2.png" alt="" class="p4-copy2 pa"
-                         v-show="currentPage>=10"
-                         transition="p10-copy2" v-trans="{
-                        transition:{transition:'all .7s ease .2s'},
-                        enter:{y:10,opacity:0},
-                        leave:{},
-                        ext:'%'}">
+                    <img src="../../img/4_copy1.png" alt="" class="p4-copy1 pa">
+                    <img src="../../img/11_copy2.png" alt="" class="p4-copy2 pa">
 
-                    <img src="../../img/11_copy3.png" alt="" class="p10-copy3 pa"
-                         v-show="currentPage>=10"
-                         transition="p10-copy3" v-trans="{
-                        transition:{transition:'all .5s linear .7s'},
-                        enter:{scale:1.2,opacity:0},
-                        leave:{},
-                        ext:'%'}">
-                    <img src="../../img/11_copy4.png" alt="" class="p10-copy4 pa"
-                         v-show="currentPage>=10"
-                         transition="p10-copy4" v-trans="{
-                        transition:{transition:'all .9s ease .9s'},
-                        enter:{y:10,opacity:0},
-                        leave:{},
-                        ext:'%'}">
+                    <img src="../../img/11_copy3.png" alt="" class="p10-copy3 pa">
+                    <img src="../../img/11_copy4.png" alt="" class="p10-copy4 pa">
                 </div>
                 <div class="p10-foot bg-darkblue pa">
                     <a :href="sponseHref">
                         <div class="p10-btn-box pa">
-                            <img src="../../img/11_btn-text.png" alt="" class="p10-btn-text pa"
-                                 v-show="currentPage>=10"
-                                 v-anim="{animation:'p10-btn-text 1.7s ease',frames:[
-                        {scale:.985},{scale:1.01},{scale:.985},'%'] }">
+                            <img src="../../img/11_btn-text.png" alt="" class="p10-btn-text pa">
                         </div>
                     </a>
                     <img src="../../img/11_copy5.png" alt="" class="p10-copy5 pa">
@@ -847,7 +687,7 @@
                 scrollBlocked: false,
                 registeredHref: 'http://www.baidu.cn/',
                 sponseHref: 'http://www.unicef.cn/cn/',
-
+                playingAudioVm:null
             }
         },
         ready(){
@@ -906,6 +746,9 @@
             },
             onTouchMove(){
                 this.scrollBlocked = false;
+            },
+            setPlayingAudioVm(vm){
+                this.playingAudioVm = vm;
             }
         }
     }
