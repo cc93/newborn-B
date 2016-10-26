@@ -141,10 +141,12 @@
                 setTimeout(()=>{
                     if(!this.canPlay){
                         this.audioEl.load();
+                        alert('this.audioEl.load();')
                         this.checkCanPlay();
                     }else{
                         //初始化显示时间
                         this.currentTimeStr = this.formatTime(this.audioEl.duration);
+                        alert('this.audioEl.duration = '+ this.audioEl.duration)
                         if (this.isPlay) {
                             this.doPlay();
                         }
@@ -174,6 +176,7 @@
             },
             onCanPlay(){
                 this.canPlay = true;
+                alert('onCanPlay()')
             },
             formatTime(second) {
                 var sec = 0;
