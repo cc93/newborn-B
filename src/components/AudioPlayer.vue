@@ -20,27 +20,27 @@
     }
 
     .audio-player-sound-wave-box {
-        width:30px;
-        height:30px;
+        width: 30px;
+        height: 30px;
         left: 240px;
         top: 27px;
     }
 
-    .audio-player-sound-wave1{
-        left:0;
-        top:5px;
+    .audio-player-sound-wave1 {
+        left: 0;
+        top: 5px;
     }
 
-    .audio-player-sound-wave2{
-        left:6px;
-        top:3px;
+    .audio-player-sound-wave2 {
+        left: 6px;
+        top: 3px;
     }
 
-    .audio-player-sound-wave3{
-        left:15px;
-        top:0;
+    .audio-player-sound-wave3 {
+        left: 15px;
+        top: 0;
     }
-    
+
     .audio-player-progress-bar-box {
         width: 281px;
         height: 9px;
@@ -91,9 +91,9 @@
                 type: Boolean,
                 default: false
             },
-            playingAudioVm:{
-                type:Object,
-                default:function () {
+            playingAudioVm: {
+                type: Object,
+                default: function () {
                     return {}
                 }
             }
@@ -106,8 +106,8 @@
                 totalTimeStr: 0,
                 progress: 0,    //[0,1]
                 currentTimeUpdateIntervalId: 0,
-                soundWaveFrame:1,
-                soundWaveIntervalId:0
+                soundWaveFrame: 1,
+                soundWaveIntervalId: 0
             };
         },
         watch: {
@@ -147,8 +147,8 @@
             },
             doPlay(){
                 //停止其他音频，保证一次只能播放一个音频
-                if(this.playingAudioVm){
-                   this.playingAudioVm.isPlay = false 
+                if (this.playingAudioVm && this.playingAudioVm !== this) {
+                    this.playingAudioVm.isPlay = false
                 }
                 this.audioEl.play();
                 this.currentTimeUpdateIntervalId = setInterval(()=> {
@@ -156,15 +156,15 @@
                     this.progress = this.audioEl.currentTime / this.audioEl.duration;
                     this.currentTimeStr = this.formatTime(this.audioEl.duration - this.audioEl.currentTime);
                 }, 100);
-                this.soundWaveIntervalId =  setInterval(()=>{
+                this.soundWaveIntervalId = setInterval(()=> {
                     this.soundWaveFrame++;
-                    if(this.soundWaveFrame>4){
-                        this.soundWaveFrame =1;
+                    if (this.soundWaveFrame > 4) {
+                        this.soundWaveFrame = 1;
                     }
-                },300);
+                }, 300);
             },
             onPlay(e){
-                this.$emit('on-play',this);
+                this.$emit('on-play', this);
             },
             formatTime(second) {
                 var sec = 0;
