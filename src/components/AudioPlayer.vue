@@ -57,10 +57,10 @@
 
 </style>
 <template>
-    <div class="audio-player">
+    <div class="audio-player" @click="isPlay=!isPlay">
         <img src="../../img/6_line1.png" alt="" class="audio-player-blue-box pa">
         <img src="../../img/6_line2.png" alt="" class="audio-player-white-box pa">
-        <img src="../../img/6_s1.png" alt="" class="audio-player-speaker pa" @click="isPlay=!isPlay">
+        <img src="../../img/6_s1.png" alt="" class="audio-player-speaker pa" >
         <div class="audio-player-sound-wave-box pa" v-show="isPlay">
             <img src="../../img/6_s2.png" alt="" class="audio-player-sound-wave1 pa" v-show="soundWaveFrame>=2">
             <img src="../../img/6_s3.png" alt="" class="audio-player-sound-wave2 pa" v-show="soundWaveFrame>=3">
