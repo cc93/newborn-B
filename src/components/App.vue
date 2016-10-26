@@ -670,9 +670,11 @@
                         Smart.Css.smartCss(el, cssSmartObj, 'px');
                     }.bind(this);
                     resize();
+                    console.log('newScale = ' + newScale);
                     window.onresize = function () {
                         //竖屏
                         resize();
+                        console.log('newScale = ' + newScale);
                     }.bind(this);
                 }
             }

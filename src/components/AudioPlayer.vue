@@ -61,7 +61,7 @@
         <img src="../../img/6_line1.png" alt="" class="audio-player-blue-box pa">
         <img src="../../img/6_line2.png" alt="" class="audio-player-white-box pa">
         <img src="../../img/6_s1.png" alt="" class="audio-player-speaker pa">
-        <div class="audio-player-sound-wave-box pa" v-show="isPlay">
+        <div class="audio-player-sound-wave-box pa">
             <img src="../../img/6_s2.png" alt="" class="audio-player-sound-wave1 pa" v-show="soundWaveFrame>=2">
             <img src="../../img/6_s3.png" alt="" class="audio-player-sound-wave2 pa" v-show="soundWaveFrame>=3">
             <img src="../../img/6_s4.png" alt="" class="audio-player-sound-wave3 pa" v-show="soundWaveFrame>=4">
@@ -106,18 +106,15 @@
                 totalTimeStr: 0,
                 progress: 0,    //[0,1]
                 currentTimeUpdateIntervalId: 0,
-                soundWaveFrame: 1,
+                soundWaveFrame: 100,
                 soundWaveIntervalId: 0
             };
         },
         watch: {
-            'isPlay': function prepareToPlay(isPlay) {
+            'isPlay': function (isPlay) {
                 if (isPlay) {
                     if (!this.canPlay) {
-                        this.audioEl.load();
-                        setTimeout(()=> {
-                            prepareToPlay(isPlay);
-                        }, 500);
+                       this.checkCanPlay()
                     } else {
                         this.doPlay();
                     }
@@ -137,6 +134,14 @@
                 this.audioEl.autoplay = false;
                 this.audioEl.loop = false;
                 this.audioEl.load();
+                this.checkCanPlay();
+            },
+            checkCanPlay(){
+                //检查是否canplay，否则重新加载音频，再次检查，直到canplay为止
+                if(!this.canPlay){
+                    this.audioEl.load();
+                    this.audioEl.onload = this.checkCanPlay;
+                }
             },
             doPlay(){
                 //停止其他音频，保证一次只能播放一个音频
@@ -184,6 +189,7 @@
             reset(){
                 clearInterval(this.currentTimeUpdateIntervalId);
                 clearInterval(this.soundWaveIntervalId);
+                this.soundWaveFrame = 100;
                 this.audioEl.pause();
                 this.audioEl.currentTime = 0;
                 this.isPlay = false;
