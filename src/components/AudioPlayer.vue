@@ -137,11 +137,19 @@
                 this.checkCanPlay();
             },
             checkCanPlay(){
-                //检查是否canplay，否则重新加载音频，再次检查，直到canplay为止
-                if(!this.canPlay){
-                    this.audioEl.load();
-                    this.audioEl.onload = this.checkCanPlay;
-                }
+                //检查是否canplay，否则重新加载音频，再次检查和加载，直到canplay为止
+                setTimeout(()=>{
+                    if(!this.canPlay){
+                        this.audioEl.load();
+                        this.checkCanPlay();
+                    }else{
+                        //初始化显示时间
+                        this.currentTimeStr = this.formatTime(this.audioEl.duration);
+                        if (this.isPlay) {
+                            this.doPlay();
+                        }
+                    }
+                },1000)
             },
             doPlay(){
                 //停止其他音频，保证一次只能播放一个音频
@@ -166,11 +174,6 @@
             },
             onCanPlay(){
                 this.canPlay = true;
-                //初始化显示时间
-                this.currentTimeStr = this.formatTime(this.audioEl.duration);
-                if (this.isPlay) {
-                    this.doPlay();
-                }
             },
             formatTime(second) {
                 var sec = 0;
