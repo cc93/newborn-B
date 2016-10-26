@@ -687,20 +687,18 @@
                 scrollBlocked: false,
                 registeredHref: 'http://www.baidu.cn/',
                 sponseHref: 'http://www.unicef.cn/cn/',
-                playingAudioVm:null
+                playingAudioVm:null,
+                pagesHeight:[0,1206,1165,967,888,1050,950,1116,1201,1422,1133]
             }
         },
         ready(){
             this.loading();
             this.stageEl = this.$els.stage;
-            //需要一点延时才能获取到元素的height
-            setTimeout(()=>{
-                //factor=1/2
-                //上一页的后1/2 到 这一页的前1/2  是 这一页
-                //即上一页底部减上一页1/2 ， 上一页底部加上这一页的1/2 ， 上一页底部的高度就是totalY
-                this.pageY = this.getPageY(0.5, this.totalPages);
-            },500);
-
+            var factor = 0.5;
+            //factor=1/2
+            //上一页的后1/2 到 这一页的前1/2  是 这一页
+            //即上一页底部减上一页1/2 ， 上一页底部加上这一页的1/2 ， 上一页底部的高度就是totalY
+            this.pageY = this.getPageY(factor, this.totalPages);
         },
         methods: {
             loading(){
@@ -718,7 +716,6 @@
                 loader.start();
             },
             getPageY(factor, totalPages){
-                var pageHeight = 0;
                 var totalY = 0;
                 var pageY = [];
                 pageY.push(0);
@@ -726,9 +723,8 @@
                     //factor=1/2
                     //上一页的后1/2 到 这一页的前1/2  是 这一页
                     //即上一页底部减上一页1/2 ， 上一页底部加上这一页的1/2 ， 上一页底部的高度就是totalY
-                    pageHeight = document.getElementById('page' + i).offsetHeight
-                    totalY += pageHeight;
-                    pageY.push(Math.floor(totalY - pageHeight * factor))
+                    totalY += this.pagesHeight[i];
+                    pageY.push(Math.floor(totalY - this.pagesHeight[i] * factor))
                 }
                 return pageY;
             },
@@ -736,9 +732,11 @@
                 if (!this.scrollBlocked) {
                     this.scrollBlocked = true;
                     var scrollY = this.stageEl.scrollTop;
-                    for (var i = 1; i <= this.totalPages; i++) {
+                    //因为只有前3页Timeline用到了currentPage变量来触发，所以只要检测前3页
+                    for (var i = 1; i <= 3; i++) {
                         if(scrollY>= this.pageY[i-1] && scrollY < this.pageY[i]){
                             this.currentPage = i;
+                            break;
                         }
                     }
                     this.scrollBlocked = false;
