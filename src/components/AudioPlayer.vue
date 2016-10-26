@@ -60,13 +60,13 @@
     <div class="audio-player" @click="isPlay=!isPlay">
         <img src="../../img/6_line1.png" alt="" class="audio-player-blue-box pa">
         <img src="../../img/6_line2.png" alt="" class="audio-player-white-box pa">
-        <img src="../../img/6_s1.png" alt="" class="audio-player-speaker pa" >
+        <img src="../../img/6_s1.png" alt="" class="audio-player-speaker pa">
         <div class="audio-player-sound-wave-box pa" v-show="isPlay">
             <img src="../../img/6_s2.png" alt="" class="audio-player-sound-wave1 pa" v-show="soundWaveFrame>=2">
             <img src="../../img/6_s3.png" alt="" class="audio-player-sound-wave2 pa" v-show="soundWaveFrame>=3">
             <img src="../../img/6_s4.png" alt="" class="audio-player-sound-wave3 pa" v-show="soundWaveFrame>=4">
         </div>
-        <audio v-el:audio @canplay="canPlay=true" @play="onPlay">
+        <audio v-el:audio @canplay="onCanPlay" @play="onPlay">
             <source :src="src" type="audio/mpeg">
             Your browser does not support HTML5 audio.
         </audio>
@@ -137,13 +137,6 @@
                 this.audioEl.autoplay = false;
                 this.audioEl.loop = false;
                 this.audioEl.load();
-                this.audioEl.oncanplay = ()=> {
-                    //初始化显示时间
-                    this.currentTimeStr = this.formatTime(this.audioEl.duration);
-                    if (this.isPlay) {
-                        this.doPlay();
-                    }
-                }
             },
             doPlay(){
                 //停止其他音频，保证一次只能播放一个音频
@@ -165,6 +158,14 @@
             },
             onPlay(e){
                 this.$emit('on-play', this);
+            },
+            onCanPlay(){
+                this.canPlay = true;
+                //初始化显示时间
+                this.currentTimeStr = this.formatTime(this.audioEl.duration);
+                if (this.isPlay) {
+                    this.doPlay();
+                }
             },
             formatTime(second) {
                 var sec = 0;
