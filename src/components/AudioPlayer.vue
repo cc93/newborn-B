@@ -66,7 +66,7 @@
             <img src="../../img/6_s3.png" alt="" class="audio-player-sound-wave2 pa" v-show="soundWaveFrame>=3">
             <img src="../../img/6_s4.png" alt="" class="audio-player-sound-wave3 pa" v-show="soundWaveFrame>=4">
         </div>
-        <audio v-el:audio @play="onPlay">
+        <audio v-el:audio @play="onPlay" @ended="onEnded">
             <source :src="src" type="audio/mpeg">
             Your browser does not support HTML5 audio.
         </audio>
@@ -96,12 +96,16 @@
                 default: function () {
                     return {}
                 }
+            },
+            duration: {
+                type: Number,
+                default: 0
             }
+
         },
         data: function () {
             return {
                 audioEl: null,
-                canPlay: false,
                 currentTimeStr: '0:00',
                 totalTimeStr: 0,
                 progress: 0,    //[0,1]
@@ -121,7 +125,14 @@
         },
         ready: function () {
             this.initAudio();
-            this.initCurrentTimeStr();
+            //如果用户未设置音频时长，则自动检测
+            //在iPad上自动检测时长有问题（偏短），所以推荐自己设置一个准确值
+            if (!this.duration) {
+                this.initDuration();
+            }else {
+                //自己设置了duration单位是秒，要转化成字符串显示，一开始显示的播放时间是音频总时长
+                this.currentTimeStr = this.formatTime(this.duration);
+            }
         },
         methods: {
             initAudio(){
@@ -131,18 +142,16 @@
                 this.audioEl.autoplay = false;
                 this.audioEl.loop = false;
             },
-            initCurrentTimeStr(){
-                //检查是否canplay，否则重新加载音频，再次检查和加载，直到canplay为止
+            initDuration(){
                 setTimeout(()=> {
-                    alert('updateDuration() setTimeout(() duration =  ' + this.audioEl.duration)
                     if (this.audioEl.duration) {
                         //一开始显示的播放时间是音频总时长
-                        this.currentTimeStr = this.formatTime(this.audioEl.duration);
+                        this.duration = this.audioEl.duration;
+                        this.currentTimeStr = this.formatTime(this.duration);
                         //获取到了总时长就跳出此异步监测函数
-                        alert('duration = ' + this.audioEl.duration)
                         return;
                     }
-                    this.initCurrentTimeStr();
+                    this.initDuration();
                 }, 1000)
             },
             doPlay(){
@@ -154,9 +163,9 @@
                 //更新播放时间
                 this.currentTimeUpdateIntervalId = setInterval(()=> {
                     //update current time
-                    this.progress = this.audioEl.currentTime / this.audioEl.duration;
+                    this.progress = this.audioEl.currentTime / this.duration;
                     //当前播放时间为倒计时
-                    this.currentTimeStr = this.formatTime(this.audioEl.duration - this.audioEl.currentTime);
+                    this.currentTimeStr = this.formatTime(this.duration - this.audioEl.currentTime);
                 }, 100);
                 //更新声音波纹动画帧
                 this.soundWaveIntervalId = setInterval(()=> {
@@ -171,19 +180,27 @@
                 clearInterval(this.currentTimeUpdateIntervalId);
                 clearInterval(this.soundWaveIntervalId);
                 //还原播放时间，声波的初始状态
-                this.currentTimeStr = this.formatTime(this.audioEl.duration);
+                this.currentTimeStr = this.formatTime(this.duration);
                 this.soundWaveFrame = 100;
                 //还原进度条
                 this.progress = 0;
                 //还原音频
                 this.audioEl.pause();
                 this.audioEl.currentTime = 0;
-                this.isPlay = false;
             },
             onPlay(e){
                 this.$emit('on-play', this);
             },
+            onEnded(e){
+                //播放结束后 需要手动标志，并重置音频
+                this.isPlay = false;
+                this.reset();
+                this.$emit('on-end', this);
+            },
             formatTime(second) {
+                if (second < 0) {
+                    second = 0;
+                }
                 var sec = 0;
                 var min = 0;
                 var strMin = '00', strSec = '00';

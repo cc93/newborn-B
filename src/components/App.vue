@@ -362,7 +362,7 @@
 
     .p10-foot {
         width: 100%;
-        height: 572px;
+        height: 660px;
         left: 0;
         top: 750px;
     }
@@ -481,7 +481,7 @@
                 </div>
                 <div class="p5-body">
                     <img src="../../img/6_pic1.jpg" alt="" class="p5-pic1 pa">
-                    <audio-player class="p5-audio-player pa"
+                    <audio-player class="p5-audio-player pa" :duration="127.944"
                                   src="./audio/p5-audio.mp3" @on-play="setPlayingAudioVm" :playing-audio-vm="playingAudioVm">
                     </audio-player>
                     <img src="../../img/6_copy2.png" alt="" class="p5-copy2 pa">
@@ -552,7 +552,7 @@
                     <div class="p9-copy2-box bg-darkblue pa">
                         <img src="../../img/10_copy2.png" alt="" class="p9-copy2 pa">
                     </div>
-                    <audio-player class="p9-audio-player pa"
+                    <audio-player class="p9-audio-player pa" :duration="97.68"
                                   src="./audio/p9-audio.mp3" @on-play="setPlayingAudioVm" :playing-audio-vm="playingAudioVm">
                     </audio-player>
                     <img src="../../img/10_copy3.png" alt="" class="p9-copy3 pa">

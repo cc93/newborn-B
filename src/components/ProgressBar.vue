@@ -54,8 +54,8 @@
             progress: {
                 type: Number,
                 default: 0,
-                validator: function (value) {     //[0,1]
-                    return (value >= 0) && (value <= 1);
+                coerce: function (value) {     //[0,1]
+                    return Math.min(Math.max(value,0),1);
                 }
             },
             barShow: {
