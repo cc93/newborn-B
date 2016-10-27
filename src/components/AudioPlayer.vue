@@ -66,7 +66,7 @@
             <img src="../../img/6_s3.png" alt="" class="audio-player-sound-wave2 pa" v-show="soundWaveFrame>=3">
             <img src="../../img/6_s4.png" alt="" class="audio-player-sound-wave3 pa" v-show="soundWaveFrame>=4">
         </div>
-        <audio v-el:audio @canplay="onCanPlay" @play="onPlay">
+        <audio v-el:audio @play="onPlay">
             <source :src="src" type="audio/mpeg">
             Your browser does not support HTML5 audio.
         </audio>
@@ -113,11 +113,7 @@
         watch: {
             'isPlay': function (isPlay) {
                 if (isPlay) {
-                    if (!this.canPlay) {
-                       this.checkCanPlay()
-                    } else {
-                        this.doPlay();
-                    }
+                    this.doPlay();
                 } else {
                     this.reset();
                 }
@@ -125,6 +121,7 @@
         },
         ready: function () {
             this.initAudio();
+            this.initCurrentTimeStr();
         },
         methods: {
             initAudio(){
@@ -133,25 +130,20 @@
                 this.audioEl.controls = false;
                 this.audioEl.autoplay = false;
                 this.audioEl.loop = false;
-                this.audioEl.load();
-                this.checkCanPlay();
             },
-            checkCanPlay(){
+            initCurrentTimeStr(){
                 //检查是否canplay，否则重新加载音频，再次检查和加载，直到canplay为止
-                setTimeout(()=>{
-                    if(!this.canPlay){
-                        this.audioEl.load();
-                        alert('this.audioEl.load();')
-                        this.checkCanPlay();
-                    }else{
-                        //初始化显示时间
+                setTimeout(()=> {
+                    alert('updateDuration() setTimeout(() duration =  ' + this.audioEl.duration)
+                    if (this.audioEl.duration) {
+                        //一开始显示的播放时间是音频总时长
                         this.currentTimeStr = this.formatTime(this.audioEl.duration);
-                        alert('this.audioEl.duration = '+ this.audioEl.duration)
-                        if (this.isPlay) {
-                            this.doPlay();
-                        }
+                        //获取到了总时长就跳出此异步监测函数
+                        alert('duration = ' + this.audioEl.duration)
+                        return;
                     }
-                },1000)
+                    this.initCurrentTimeStr();
+                }, 1000)
             },
             doPlay(){
                 //停止其他音频，保证一次只能播放一个音频
@@ -159,11 +151,14 @@
                     this.playingAudioVm.isPlay = false
                 }
                 this.audioEl.play();
+                //更新播放时间
                 this.currentTimeUpdateIntervalId = setInterval(()=> {
                     //update current time
                     this.progress = this.audioEl.currentTime / this.audioEl.duration;
+                    //当前播放时间为倒计时
                     this.currentTimeStr = this.formatTime(this.audioEl.duration - this.audioEl.currentTime);
                 }, 100);
+                //更新声音波纹动画帧
                 this.soundWaveIntervalId = setInterval(()=> {
                     this.soundWaveFrame++;
                     if (this.soundWaveFrame > 4) {
@@ -171,12 +166,22 @@
                     }
                 }, 300);
             },
+            reset(){
+                //停止更新播放时间，声波动画帧
+                clearInterval(this.currentTimeUpdateIntervalId);
+                clearInterval(this.soundWaveIntervalId);
+                //还原播放时间，声波的初始状态
+                this.currentTimeStr = this.formatTime(this.audioEl.duration);
+                this.soundWaveFrame = 100;
+                //还原进度条
+                this.progress = 0;
+                //还原音频
+                this.audioEl.pause();
+                this.audioEl.currentTime = 0;
+                this.isPlay = false;
+            },
             onPlay(e){
                 this.$emit('on-play', this);
-            },
-            onCanPlay(){
-                this.canPlay = true;
-                alert('onCanPlay()')
             },
             formatTime(second) {
                 var sec = 0;
@@ -191,17 +196,6 @@
                 }
                 strMin = min;
                 return strMin + ':' + strSec;
-            },
-            reset(){
-                clearInterval(this.currentTimeUpdateIntervalId);
-                clearInterval(this.soundWaveIntervalId);
-                this.soundWaveFrame = 100;
-                this.audioEl.pause();
-                this.audioEl.currentTime = 0;
-                this.isPlay = false;
-                //reset progress and time
-                this.progress = 0;
-                this.currentTimeStr = this.formatTime(this.audioEl.duration);
             }
         },
     }
