@@ -1,6 +1,5 @@
 var webpack = require('webpack');
 var fs = require("fs");
-var autoprefixer = require('autoprefixer');
 
 var getDirFilesPathArr = function (path) {
     var dirFilesPathArr = {};
@@ -49,7 +48,6 @@ module.exports = {
             //{ test: /\.svg|ttf|eot|woff|woff2$/, loader:'file&name=./build/[hash].[ext]'}
         ]
     },
-    postcss: [autoprefixer({browsers: ['last 2 versions', 'Android 2.3']})],
     plugins: [
         new webpack.DefinePlugin({PRODUCTION: JSON.stringify(process.env.NODE_ENV === 'production')})
     ],
