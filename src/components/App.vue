@@ -14,8 +14,8 @@
     }
 
     .stage {
-        width: 750px;
-        height: 1334px;
+        width: 100%;
+        height: 100%;
         position: relative;
         overflow-y: scroll;
         overflow-x: hidden;
@@ -25,7 +25,6 @@
         width: 100%;
         height: 100%;
         position: relative;
-        z-index: -10;
     }
 
     #page1 {
@@ -40,14 +39,6 @@
     .p1-pic1-box {
         height: 434px;
         overflow: hidden;
-    }
-
-    .p1-pic1 {
-        -webkit-transform: scale(1.1);
-        -moz-transform: scale(1.1);
-        -ms-transform: scale(1.1);
-        -o-transform: scale(1.1);
-        transform: scale(1.1);
     }
 
     .logo {
@@ -387,7 +378,6 @@
     <div class="app" v-show="isLoadComplete">
 
         <div class="stage" v-el:stage
-             v-auto-scale="{width:750}"
              @touchmove="onTouchMove"
              @scroll="computeCurrentPage">
 
@@ -596,88 +586,6 @@
         components: {
             'timeline': Timeline,
             'audio-player': AudioPlayer
-        },
-        directives: {
-            'trans': {
-                update: function (val) {
-                    var className = this.el.className;
-                    var str = className.match(/\b([0-9A-Za-z-]+)-transition\b/g);
-                    var transName = RegExp.$1;
-                    var cssObj = val;
-                    var ext = cssObj.ext || '%';     //默认单位是px
-                    delete cssObj.ext;
-                    Smart._.each(cssObj, function (v, k) {
-                        Smart.Css.createSmartCssStyle('.' + transName + '-' + k, v, ext);
-                    });
-                }
-            },
-            'anim': {
-                update: function (val) {
-                    var name = '';
-                    var time = '';
-                    var timeFn = '';
-                    var loop = '';
-                    var ext = 'px';     //默认单位是px
-                    var frames = {};    //obj, required!
-                    //取得frames对象
-                    if (val.frames instanceof Array) {  // val.frames is [Object Array]
-                        var length = val.frames.length;
-                        var lastArg = val.frames[length - 1];
-                        var key = '';
-                        if (typeof lastArg === 'string') {
-                            ext = lastArg;
-                            val.frames.splice(length - 1, 1);
-                            length -= 1;
-                        }
-                        for (var i = 0; i < length; i++) {
-                            key = (i / (length - 1) * 100).toFixed(1) + '%';
-                            frames[key] = val.frames[i];
-                        }
-                        frames['ext'] = ext;
-                    } else {     // val.frames is [Object Object]
-                        frames = val.frames;
-                    }
-                    //取得animation的css字符串
-                    if (val.animation != undefined) {
-                        var str = val.animation;
-                        var strArray = str.split(' ');
-                        name = strArray[0];
-                        time = strArray[1] || '1s';
-                        timeFn = strArray[2] || 'linear';
-                        loop = strArray[3] || 'infinite';
-                    } else {
-                        name = val.name;    // string, can be null or undefined
-                        time = val.time || '1s';
-                        timeFn = val.timeFn || 'linear';
-                        loop = val.loop || 'infinite';
-                    }
-                    var anim = Smart.Animations.create(name, frames);
-                    this.el.style.animation = anim.name + ' ' + time + ' ' + timeFn + ' ' + loop;
-                }
-            },
-            'auto-scale': {
-                update: function (val) {
-                    var el = this.el;
-                    var width = val.width;
-                    var newWidth, newScale;
-                    //竖屏显示
-                    var resize = function () {
-                        //长页面垂直滑动，宽度占满
-                        newWidth = window.innerWidth;
-//                        newWidth = 600;
-                        newScale = newWidth / width;            //scaleX,scaleY
-                        var cssSmartObj = {scale: newScale, 'transform-origin': '0 0'};
-                        Smart.Css.smartCss(el, cssSmartObj, 'px');
-                    }.bind(this);
-                    resize();
-                    console.log('newScale = ' + newScale);
-                    window.onresize = function () {
-                        //竖屏
-                        resize();
-                        console.log('newScale = ' + newScale);
-                    }.bind(this);
-                }
-            }
         },
         data(){
             return {
