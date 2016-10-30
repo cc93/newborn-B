@@ -2,7 +2,6 @@
  * Created by congcong on 9/7/16.
  */
 import App from './components/App.vue';
-import FastClick from 'fastclick';
 
 //FastClick
 if ('addEventListener' in document) {
