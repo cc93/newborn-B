@@ -41,8 +41,7 @@ module.exports = {
                     // the threshold
                     name: '[name].[ext]?[hash]'
                 }
-            },
-            { test: /\.less$/,  loader: "css!postcss!less" }
+            }
             // { test: /\.css$/,  loader: "style!css" },
             //{ test: /\.jp(e)?g|png|gif|svg|ttf|eot|woff|woff2$/, loader:'url?limit=8192&name=./build/[hash].[ext]'},
             //{ test: /\.svg|ttf|eot|woff|woff2$/, loader:'file&name=./build/[hash].[ext]'}

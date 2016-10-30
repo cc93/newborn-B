@@ -333,7 +333,7 @@
     }
 
     #page10 {
-        height: 1400px;
+        height: 1160px;
     }
 
     .p10-copy3 {
@@ -353,7 +353,7 @@
 
     .p10-foot {
         width: 100%;
-        height: 660px;
+        height: 420px;
         left: 0;
         top: 750px;
     }
