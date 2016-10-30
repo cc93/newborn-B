@@ -65,10 +65,6 @@
             clickable: {
                 type: Boolean,
                 default: true
-            },
-            scale:{
-                type: Number,
-                default: 1
             }
 
         },
@@ -144,7 +140,7 @@
                         document.msFullscreenElement;
             },
             updateProgress: function (event) {
-                var offsetX = Math.min(this.$els.container.offsetWidth, Math.max(0, this.getMouseX(event) / 0.5869218500797448 - this.getContainerX(this.$els.container)));   //offsetX: [0,containerWidth]
+                var offsetX = Math.min(this.$els.container.offsetWidth, Math.max(0, this.getMouseX(event)- this.getContainerX(this.$els.container)));   //offsetX: [0,containerWidth]
                 this.progress = offsetX / this.$els.container.offsetWidth;     //progress: [0,1]
                 this.$emit('on-progress-updated', this.progress);
                 return true;
