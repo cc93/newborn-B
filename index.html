@@ -3,15 +3,35 @@
 <head>
     <meta charset="utf-8">
     <title>出生后的第一分钟是最关键的</title>
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
-    <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="format-detection" content="telephone=no,email=no">
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">-->
+    <meta name="viewport" content="width=device-width">
+    <!-- 屏幕适配的js，方式：设置viewport的initial-scale完成整体缩放 -->
+    <script>
+        ;(function (win) {
+            var doc = win.document;
+            var docEl = doc.documentElement;
+            //设计稿的尺寸
+            var docWidth = 750;
+            var docHeight = 1334;
+            //实际的屏幕尺寸
+            var screenWidth = docEl.getBoundingClientRect().width;
+            var screenHeight = docEl.getBoundingClientRect().height;
+            //缩放大小，宽度占满
+            var scale =  screenWidth / docWidth;
+            var metaEl = doc.querySelector('meta[name="viewport"]');
+            metaEl.setAttribute('content', 'width=device-width,initial-scale=' + scale + ', maximum-scale=' + scale + ', minimum-scale=' + scale + ', user-scalable=no');
+        })(window);
+    </script>
+    <!-- /屏幕适配的js，方式：设置viewport的initial-scale完成整体缩放 -->
 
-    <!-- The styles -->
+    <!-- /basic styles -->
     <link rel="stylesheet" href="./css/base.css">
+    <!--<link rel="apple-touch-icon" href="favicon.png">-->
+    <!--<link rel="shortcut icon" href="favicon.png" type="image/x-icon">-->
     <style>
         html, body {
             width: 100%;
@@ -22,13 +42,15 @@
             -webkit-overflow-scrolling: touch;
         }
     </style>
+    <!-- /basic styles -->
 </head>
 <body>
 <app></app>
 <script src="./js/smart.min.js"></script>
-<script src="//cdn.bootcss.com/vue/1.0.24/vue.min.js"></script>
-<script src="//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js"></script>
-<script src="./js/jweixin-1.0.0.js"></script>
+<script src="./js/vue.min.js"></script>
+<script src="./js/fastclick.min.js"></script>
+<!--<script src="//cdn.bootcss.com/vue/1.0.24/vue.min.js"></script>-->
+<!--<script src="//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js"></script>-->
 <script src="./build/main.js"></script>
 </body>
 </html>
