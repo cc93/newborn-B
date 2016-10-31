@@ -58,6 +58,7 @@
 </style>
 <template>
     <div class="audio-player" @click="isPlay=!isPlay">
+        <slot></slot>
         <img src="../../img/6_line1.png" alt="" class="audio-player-blue-box pa">
         <img src="../../img/6_line2.png" alt="" class="audio-player-white-box pa">
         <img src="../../img/6_s1.png" alt="" class="audio-player-speaker pa">

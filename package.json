@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "rm -rf build&& mkdir build",
-    "dev": "cross-env NODE_ENV=development webpack-dev-server --inline --hot --host 10.202.193.239 --port 7777",
+    "dev": "cross-env NODE_ENV=development webpack-dev-server --inline --hot --host 192.168.1.104 --port 7777",
     "deploy": "cross-env NODE_ENV=production webpack --progress --hide-modules"
   },
   "author": "congcong",

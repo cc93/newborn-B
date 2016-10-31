@@ -190,8 +190,9 @@
     }
 
     .p5-copy2 {
-        left: 77px;
-        top: 632px;
+        left: 32px;
+        top: 28px;
+        z-index: 2;
     }
 
     .p5-copy3 {
@@ -328,8 +329,9 @@
     }
 
     .p9-copy3 {
-        left: 90px;
-        top: 998px;
+        left: 57px;
+        top: 28px;
+        z-index: 2;
     }
 
     #page10 {
@@ -473,8 +475,8 @@
                     <img src="../../img/6_pic1.jpg" alt="" class="p5-pic1 pa">
                     <audio-player class="p5-audio-player pa" :duration="127.944"
                                   src="./audio/p5-audio.mp3" @on-play="setPlayingAudioVm" :playing-audio-vm="playingAudioVm">
+                        <img src="../../img/6_copy2.png" alt="" class="p5-copy2 pa">
                     </audio-player>
-                    <img src="../../img/6_copy2.png" alt="" class="p5-copy2 pa">
 
                     <img src="../../img/6_copy3.png" alt="" class="p5-copy3 pa">
                 </div>
@@ -544,8 +546,8 @@
                     </div>
                     <audio-player class="p9-audio-player pa" :duration="97.68"
                                   src="./audio/p9-audio.mp3" @on-play="setPlayingAudioVm" :playing-audio-vm="playingAudioVm">
+                        <img src="../../img/10_copy3.png" alt="" class="p9-copy3 pa">
                     </audio-player>
-                    <img src="../../img/10_copy3.png" alt="" class="p9-copy3 pa">
                     <img src="../../img/10_copy4.png" alt="" class="p9-copy4 pa">
                 </div>
                 <div class="p8-foot bg-darkblue pa">
