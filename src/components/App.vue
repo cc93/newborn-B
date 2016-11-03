@@ -21,6 +21,41 @@
         overflow-x: hidden;
     }
 
+    .loading{
+        width:100%;
+        height:100%;
+        position: absolute;
+        left:0;
+        top:0;
+        z-index: 50;
+        background: url(http://static.unicef.cn/201610cwh5/images/bg_0.jpg);
+        background-size: cover;
+    }
+
+    .loading-title{
+        width: 100%;
+        left:0;
+        top:10%;
+    }
+
+    .loading-cloud{
+        width:100%;
+        left:0;
+        bottom: 0;
+    }
+
+    .loading-bar{
+        left:50%;
+        top:55%;
+        -webkit-transform: translateX(-50%) translateY(-50%);
+        transform: translateX(-50%) translateY(-50%);
+    }
+
+    .loading-bar-text{
+        color: #fff;
+        font-size: 32px;
+    }
+
     .page {
         width: 100%;
         height: 100%;
@@ -377,11 +412,34 @@
 
 </style>
 <template>
-    <div class="app" v-show="isLoadComplete">
+    <div class="app">
+        <div class="loading"
+             v-show="!isLoadComplete"
+             transition="fade"
+             v-trans="{
+                transition:{transition:'all .7s ease .2s',opacity:1},
+                enter:{opacity:0},
+                leave:{opacity:0,y:-100},
+                 ext:'%'}">
+            <img class="loading-title pa" src="http://static.unicef.cn/201610cwh5/images/img_0.png" alt="">
+            <img class="loading-cloud pa" src="http://static.unicef.cn/201610cwh5/images/img_1.png" alt="">
+            <radia-progress-bar class="loading-bar pa"
+                                :diameter="160"
+                                :completed-steps="loadedPercent"
+                                :total-steps="100"
+                                start-color="rgba(255,255,255,0.7)"
+                                stop-color="rgba(255,255,255,0.7)"
+                                inner-stroke-color="rgba(255,255,255,0.5)"
+                                :stroke-width="10">
+                <div class="loading-bar-text">{{loadedPercent+'%'}}</div>
+            </radia-progress-bar>
+        </div>
 
         <div class="stage" v-el:stage
              @touchmove="onTouchMove"
-             @scroll="computeCurrentPage">
+             @scroll="computeCurrentPage"
+             v-show="isLoadComplete"
+             transition="fade">
 
             <div id="page1" class="page bg-lightblue">
                 <div class="p1-head">
@@ -419,7 +477,7 @@
                               :end-time="40"
                               :run="currentPage==2">
                     </timeline>
-                    <img src="../../img/2_copy2.png" alt="" class="p2-copy2 pa" >
+                    <img src="../../img/2_copy2.png" alt="" class="p2-copy2 pa">
                     <img src="../../img/2_copy3.png" alt="" class="p2-copy3 pa">
                     <div class="p2-sponsor-arrow pa">
                         &gt;&gt;
@@ -474,7 +532,8 @@
                 <div class="p5-body">
                     <img src="../../img/6_pic1.jpg" alt="" class="p5-pic1 pa">
                     <audio-player class="p5-audio-player pa" :duration="127.944"
-                                  src="./audio/p5-audio.mp3" @on-play="setPlayingAudioVm" :playing-audio-vm="playingAudioVm">
+                                  src="./audio/p5-audio.mp3" @on-play="setPlayingAudioVm"
+                                  :playing-audio-vm="playingAudioVm">
                         <img src="../../img/6_copy2.png" alt="" class="p5-copy2 pa">
                     </audio-player>
 
@@ -545,7 +604,8 @@
                         <img src="../../img/10_copy2.png" alt="" class="p9-copy2 pa">
                     </div>
                     <audio-player class="p9-audio-player pa" :duration="97.68"
-                                  src="./audio/p9-audio.mp3" @on-play="setPlayingAudioVm" :playing-audio-vm="playingAudioVm">
+                                  src="./audio/p9-audio.mp3" @on-play="setPlayingAudioVm"
+                                  :playing-audio-vm="playingAudioVm">
                         <img src="../../img/10_copy3.png" alt="" class="p9-copy3 pa">
                     </audio-player>
                     <img src="../../img/10_copy4.png" alt="" class="p9-copy4 pa">
@@ -584,13 +644,32 @@
     //        采用（750 * 1334 iphone6）进行排版，缩放方式：宽度满屏
     import Timeline from './Timeline.vue'
     import AudioPlayer from  './AudioPlayer.vue'
+    import RadialProgressBar from './RadialProgressBar.vue'
+
     export default{
         components: {
             'timeline': Timeline,
-            'audio-player': AudioPlayer
+            'audio-player': AudioPlayer,
+            'radia-progress-bar': RadialProgressBar
+        },
+        directives:{
+            'trans': {
+                update: function (val) {
+                    var className = this.el.className;
+                    var str = className.match(/\b([0-9A-Za-z-]+)-transition\b/g);
+                    var transName = RegExp.$1;
+                    var cssObj = val;
+                    var ext = cssObj.ext || '%';     //默认单位是px
+                    delete cssObj.ext;
+                    Smart._.each(cssObj, function (v, k) {
+                        Smart.Css.createSmartCssStyle('.' + transName + '-' + k, v, ext);
+                    });
+                }
+            }
         },
         data(){
             return {
+                loadedPercent:0,
                 isLoadComplete: false,
                 currentPage: 0,
                 totalPages: 10,
@@ -599,8 +678,8 @@
                 scrollBlocked: false,
                 registeredHref: 'http://www.baidu.cn/',
                 sponseHref: 'http://www.unicef.cn/cn/',
-                playingAudioVm:null,
-                pagesHeight:[0,1206,1165,967,888,1050,950,1116,1201,1422,1133]
+                playingAudioVm: null,
+                pagesHeight: [0, 1206, 1165, 967, 888, 1050, 950, 1116, 1201, 1422, 1133]
             }
         },
         ready(){
@@ -617,13 +696,40 @@
                 var Loader = Smart.Loader;
                 var loader = new Loader();
                 loader.addImages(document.querySelector('body'));
-                //监听资源加载完成事件
-                loader.addCompletionListener(function () {
-                    console.log('load complete!');
-                    this.isLoadComplete = true;
-                    //currentPage 从0变到1 以触发第一页的动画
-                    this.currentPage = 1;
+                var startTime = new Date().getTime();
+                var setLoadedPercent = (p)=>{
+                    var pp = Math.ceil(Math.min((new Date().getTime() - startTime)/25, p));
+                    this.loadedPercent = pp;
+                    if(p>=100){
+                        if(pp>=100){
+                            loadedCompelte();
+                        }else{
+                            setTimeout(()=>{
+                                setLoadedPercent(100);
+                            });
+                        }
+                    }
+                };
+                var loadedCompelte = ()=>{
+                    setTimeout(()=>{
+                        this.isLoadComplete = true;
+                        //currentPage 从0变到1 以触发第一页的动画
+                        this.currentPage = 1;
+                    },500)
+                };
+                //监听资源加载进度事件
+                loader.addProgressListener(function (p) {
+                    setLoadedPercent(p.completedCount/p.totalCount*100);
+                    console.log(p.completedCount+'/'+ p.totalCount);
                 }.bind(this));
+
+//                //监听资源加载完成事件
+//                loader.addCompletionListener(function () {
+//                    this.isLoadComplete = true;
+//                    //currentPage 从0变到1 以触发第一页的动画
+//                    this.currentPage = 1;
+//                }.bind(this));
+//
                 //启动资源加载管理器
                 loader.start();
             },
@@ -646,7 +752,7 @@
                     var scrollY = this.stageEl.scrollTop;
                     //因为只有前3页Timeline用到了currentPage变量来触发，所以只要检测前3页
                     for (var i = 1; i <= 3; i++) {
-                        if(scrollY>= this.pageY[i-1] && scrollY < this.pageY[i]){
+                        if (scrollY >= this.pageY[i - 1] && scrollY < this.pageY[i]) {
                             this.currentPage = i;
                             break;
                         }
