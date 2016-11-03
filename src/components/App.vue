@@ -640,8 +640,6 @@
     </div>
 </template>
 <script>
-    //        750 * 1206 设计稿
-    //        采用（750 * 1334 iphone6）进行排版，缩放方式：宽度满屏
     import Timeline from './Timeline.vue'
     import AudioPlayer from  './AudioPlayer.vue'
     import RadialProgressBar from './RadialProgressBar.vue'
@@ -720,17 +718,8 @@
                 //监听资源加载进度事件
                 loader.addProgressListener(function (p) {
                     setLoadedPercent(p.completedCount/p.totalCount*100);
-                    console.log(p.completedCount+'/'+ p.totalCount);
                 }.bind(this));
 
-//                //监听资源加载完成事件
-//                loader.addCompletionListener(function () {
-//                    this.isLoadComplete = true;
-//                    //currentPage 从0变到1 以触发第一页的动画
-//                    this.currentPage = 1;
-//                }.bind(this));
-//
-                //启动资源加载管理器
                 loader.start();
             },
             getPageY(factor, totalPages){

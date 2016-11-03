@@ -20,6 +20,8 @@
     "css-loader": "^0.23.0",
     "fastclick": "^1.0.6",
     "file-loader": "^0.8.4",
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.0",
     "less": "^2.7.1",
     "less-loader": "^2.2.3",
     "url-loader": "^0.5.7",

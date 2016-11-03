@@ -30,7 +30,12 @@ module.exports = {
         //],
         loaders: [
             {test: /\.vue$/, loader: 'vue'},
-            {test: /\.js$/, loader: 'babel', exclude: /node_modules/, query: {presets: ['es2015'],plugins:['transform-runtime']}},
+            {
+                test: /\.js$/,
+                loader: 'babel',
+                exclude: /node_modules/,
+                query: {presets: ['es2015'], plugins: ['transform-runtime']}
+            },
             {
                 test: /\.(png|jpg|gif|svg|ttf|eot|woff|woff2)$/,
                 loader: 'url',
