@@ -30,6 +30,8 @@
         z-index: 50;
         background: url(http://static.unicef.cn/201610cwh5/images/bg_0.jpg);
         background-size: cover;
+        -webkit-transition: opacity .7s;
+        transition: opacity .7s;
     }
 
     .loading-title{
@@ -413,14 +415,7 @@
 </style>
 <template>
     <div class="app">
-        <div class="loading"
-             v-show="!isLoadComplete"
-             transition="fade"
-             v-trans="{
-                transition:{transition:'all .7s ease .2s',opacity:1},
-                enter:{opacity:0},
-                leave:{opacity:0,y:-100},
-                 ext:'%'}">
+        <div class="loading" :style="{opacity:isLoadComplete? 0:1}">
             <img class="loading-title pa" src="http://static.unicef.cn/201610cwh5/images/img_0.png" alt="">
             <img class="loading-cloud pa" src="http://static.unicef.cn/201610cwh5/images/img_1.png" alt="">
             <radia-progress-bar class="loading-bar pa"
@@ -437,9 +432,7 @@
 
         <div class="stage" v-el:stage
              @touchmove="onTouchMove"
-             @scroll="computeCurrentPage"
-             v-show="isLoadComplete"
-             transition="fade">
+             @scroll="computeCurrentPage">
 
             <div id="page1" class="page bg-lightblue">
                 <div class="p1-head">
