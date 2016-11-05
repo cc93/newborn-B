@@ -21,41 +21,39 @@
         overflow-x: hidden;
     }
 
-    .loading{
-        width:100%;
-        height:100%;
+    .loading {
+        width: 100%;
+        height: 100%;
         position: absolute;
-        left:0;
-        top:0;
+        left: 0;
+        top: 0;
         z-index: 50;
+        overflow: hidden;
         background: url(http://static.unicef.cn/201610cwh5/images/bg_0.jpg);
         background-size: cover;
-        -webkit-transition: opacity .7s;
-        transition: opacity .7s;
+        -webkit-transition: height .5s;
+        transition: height .5s;
     }
 
-    .loading-title{
+    .loading-title {
         width: 100%;
-        left:0;
-        top:10%;
+        left: 0;
+        top: 10%;
+        z-index: 5;
     }
 
-    .loading-cloud{
-        width:100%;
-        left:0;
+
+    .loading-cloud {
+        width: 100%;
+        left: 0;
         bottom: 0;
     }
 
-    .loading-bar{
-        left:50%;
-        top:55%;
+    .loading-bar {
+        left: 50%;
+        top: 55%;
         -webkit-transform: translateX(-50%) translateY(-50%);
         transform: translateX(-50%) translateY(-50%);
-    }
-
-    .loading-bar-text{
-        color: #fff;
-        font-size: 32px;
     }
 
     .page {
@@ -241,7 +239,6 @@
         left: 30px;
         top: 146px;
     }
-
     .p5-audio-player {
         left: 45px;
         top: 605px;
@@ -415,19 +412,10 @@
 </style>
 <template>
     <div class="app">
-        <div class="loading" :style="{opacity:isLoadComplete? 0:1}">
+        <div class="loading" :style="{height:isLoadComplete? '0':'100%'}">
             <img class="loading-title pa" src="http://static.unicef.cn/201610cwh5/images/img_0.png" alt="">
             <img class="loading-cloud pa" src="http://static.unicef.cn/201610cwh5/images/img_1.png" alt="">
-            <radia-progress-bar class="loading-bar pa"
-                                :diameter="160"
-                                :completed-steps="loadedPercent"
-                                :total-steps="100"
-                                start-color="rgba(255,255,255,0.7)"
-                                stop-color="rgba(255,255,255,0.7)"
-                                inner-stroke-color="rgba(255,255,255,0.5)"
-                                :stroke-width="10">
-                <div class="loading-bar-text">{{loadedPercent+'%'}}</div>
-            </radia-progress-bar>
+            <div id="indicatorContainer" class="loading-bar pa"></div>
         </div>
 
         <div class="stage" v-el:stage
@@ -635,15 +623,13 @@
 <script>
     import Timeline from './Timeline.vue'
     import AudioPlayer from  './AudioPlayer.vue'
-    import RadialProgressBar from './RadialProgressBar.vue'
 
     export default{
         components: {
             'timeline': Timeline,
             'audio-player': AudioPlayer,
-            'radia-progress-bar': RadialProgressBar
         },
-        directives:{
+        directives: {
             'trans': {
                 update: function (val) {
                     var className = this.el.className;
@@ -660,7 +646,7 @@
         },
         data(){
             return {
-                loadedPercent:0,
+                loadedPercent: 0,
                 isLoadComplete: false,
                 currentPage: 0,
                 totalPages: 10,
@@ -684,35 +670,44 @@
         },
         methods: {
             loading(){
+                //init radialIndicator
+                var radialObj = radialIndicator('#indicatorContainer', {
+                    barColor: 'rgba(255,255,255,1)',
+                    barBgColor:'rgba(255,255,255,0.7)',
+                    barWidth: 10,
+                    initValue: 0,
+                    roundCorner: true,
+                    percentage: true
+                });
+                //init Loader
                 var Loader = Smart.Loader;
                 var loader = new Loader();
                 loader.addImages(document.querySelector('body'));
                 var startTime = new Date().getTime();
-                var setLoadedPercent = (p)=>{
-                    var pp = Math.ceil(Math.min((new Date().getTime() - startTime)/25, p));
-                    this.loadedPercent = pp;
-                    if(p>=100){
-                        if(pp>=100){
+                var setLoadedPercent = (p)=> {
+                    var pp = Math.ceil(Math.min((new Date().getTime() - startTime) / 25 + 20, p));
+                    radialObj.animate(pp);
+                    if (p >= 100) {
+                        if (pp >= 100) {
                             loadedCompelte();
-                        }else{
-                            setTimeout(()=>{
+                        } else {
+                            setTimeout(()=> {
                                 setLoadedPercent(100);
                             });
                         }
                     }
                 };
-                var loadedCompelte = ()=>{
-                    setTimeout(()=>{
+                var loadedCompelte = ()=> {
+                    setTimeout(()=> {
                         this.isLoadComplete = true;
                         //currentPage 从0变到1 以触发第一页的动画
                         this.currentPage = 1;
-                    },500)
+                    }, 1500)
                 };
                 //监听资源加载进度事件
                 loader.addProgressListener(function (p) {
-                    setLoadedPercent(p.completedCount/p.totalCount*100);
+                    setLoadedPercent(p.completedCount / p.totalCount * 100);
                 }.bind(this));
-
                 loader.start();
             },
             getPageY(factor, totalPages){
