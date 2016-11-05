@@ -56,6 +56,27 @@
         transform: translateX(-50%) translateY(-50%);
     }
 
+    .block{
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        left: 0;
+        top: 0;
+        z-index: 99;
+        overflow: hidden;
+        display: none;
+        background: rgba(255,255,255,.9);
+    }
+
+    .block-text{
+        left:50%;
+        top:50%;
+        -webkit-transform: translate(-50%,50%);
+        transform: translate(-50%,50%);
+        color: #00aeef;
+        font-size: 32px;
+    }
+
     .page {
         width: 100%;
         height: 100%;
@@ -417,7 +438,9 @@
             <img class="loading-cloud pa" src="http://static.unicef.cn/201610cwh5/images/img_1.png" alt="">
             <div id="indicatorContainer" class="loading-bar pa"></div>
         </div>
-
+        <div class="block" :style="{display:isPortrait? 'none':'block'}">
+            <p class="block-text pa">请使用竖屏浏览</p>
+        </div>
         <div class="stage" v-el:stage
              @touchmove="onTouchMove"
              @scroll="computeCurrentPage">
@@ -646,8 +669,8 @@
         },
         data(){
             return {
-                loadedPercent: 0,
                 isLoadComplete: false,
+                isPortrait: true,
                 currentPage: 0,
                 totalPages: 10,
                 pageY: [],
@@ -660,6 +683,7 @@
             }
         },
         ready(){
+            this.initBlock();
             this.loading();
             this.stageEl = this.$els.stage;
             var factor = 0.5;
@@ -669,6 +693,18 @@
             this.pageY = this.getPageY(factor, this.totalPages);
         },
         methods: {
+            initBlock(){
+                var onresize = ()=>{
+                    var windowSize = Smart.Utils.windowSize();
+                    if (windowSize.width < windowSize.height) {
+                        this.isPortrait = true;
+                    } else {
+                        this.isPortrait = false;
+                    }
+                };
+                Smart.Event.windowEvent('resize', onresize);
+                onresize();
+            },
             loading(){
                 //init radialIndicator
                 var radialObj = radialIndicator('#indicatorContainer', {
