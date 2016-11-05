@@ -57,7 +57,7 @@
 
 </style>
 <template>
-    <div class="audio-player" @click="isPlay=!isPlay">
+    <div class="audio-player" @click="isPlay=!isPlay" v-el:player>
         <slot></slot>
         <img src="../../img/6_line1.png" alt="" class="audio-player-blue-box pa">
         <img src="../../img/6_line2.png" alt="" class="audio-player-white-box pa">
@@ -67,7 +67,7 @@
             <img src="../../img/6_s3.png" alt="" class="audio-player-sound-wave2 pa" v-show="soundWaveFrame>=3">
             <img src="../../img/6_s4.png" alt="" class="audio-player-sound-wave3 pa" v-show="soundWaveFrame>=4">
         </div>
-        <audio v-el:audio @play="onPlay" @ended="onEnded">
+        <audio :id="audioId" autoplay @play="onPlay" @ended="onEnded">
             <source :src="src" type="audio/mpeg">
             Your browser does not support HTML5 audio.
         </audio>
@@ -107,6 +107,7 @@
         data: function () {
             return {
                 audioEl: null,
+                audioId: 'audio-player-' + (new Date().getTime() + Math.floor(Math.random() * 1000)),
                 currentTimeStr: '0:00',
                 totalTimeStr: 0,
                 progress: 0,    //[0,1]
@@ -117,6 +118,7 @@
         },
         watch: {
             'isPlay': function (isPlay) {
+                alert('isPlay = ' + isPlay)
                 if (isPlay) {
                     this.doPlay();
                 } else {
@@ -130,18 +132,18 @@
             //在iPad上自动检测时长有问题（偏短），所以推荐自己设置一个准确值
             if (!this.duration) {
                 this.initDuration();
-            }else {
+            } else {
                 //自己设置了duration单位是秒，要转化成字符串显示，一开始显示的播放时间是音频总时长
                 this.currentTimeStr = this.formatTime(this.duration);
             }
         },
         methods: {
             initAudio(){
-                this.audioEl = this.$els.audio;
-                this.audioEl.src = this.src;
-                this.audioEl.controls = false;
-                this.audioEl.autoplay = false;
-                this.audioEl.loop = false;
+                this.audioEl = document.getElementById(this.audioId);
+                this.audioEl.oncanplay = function () {
+//                    alert('audio canplay!');
+                    this.audioEl.pause();
+                }.bind(this);
             },
             initDuration(){
                 setTimeout(()=> {
@@ -157,24 +159,36 @@
             },
             doPlay(){
                 //停止其他音频，保证一次只能播放一个音频
-                if (this.playingAudioVm && this.playingAudioVm !== this) {
+                if (this.playingAudioVm && (this.playingAudioVm !== this)) {
                     this.playingAudioVm.isPlay = false
                 }
                 this.audioEl.play();
-                //更新播放时间
-                this.currentTimeUpdateIntervalId = setInterval(()=> {
-                    //update current time
-                    this.progress = this.audioEl.currentTime / this.duration;
-                    //当前播放时间为倒计时
-                    this.currentTimeStr = this.formatTime(this.duration - this.audioEl.currentTime);
-                }, 100);
-                //更新声音波纹动画帧
-                this.soundWaveIntervalId = setInterval(()=> {
-                    this.soundWaveFrame++;
-                    if (this.soundWaveFrame > 4) {
-                        this.soundWaveFrame = 1;
+                this.audioEl.currentTime = 1;
+                setTimeout(()=>{
+                    alert('paused = ' + this.audioEl.paused);
+                    if (this.audioEl.paused) {
+                        this.isPlay = false;
+                        //需要异步线程，否则函数栈堆积容易卡死
+                        setTimeout(()=> {
+                            this.isPlay = true;
+                        }, 200);
+                    } else {
+                        //更新播放时间
+                        this.currentTimeUpdateIntervalId = setInterval(()=> {
+                            //update current time
+                            this.progress = this.audioEl.currentTime / this.duration;
+                            //当前播放时间为倒计时
+                            this.currentTimeStr = this.formatTime(this.duration - this.audioEl.currentTime);
+                        }, 100);
+                        //更新声音波纹动画帧
+                        this.soundWaveIntervalId = setInterval(()=> {
+                            this.soundWaveFrame++;
+                            if (this.soundWaveFrame > 4) {
+                                this.soundWaveFrame = 1;
+                            }
+                        }, 300);
                     }
-                }, 300);
+                },1000);
             },
             reset(){
                 //停止更新播放时间，声波动画帧
