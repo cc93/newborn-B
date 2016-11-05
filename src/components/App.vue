@@ -717,7 +717,7 @@
                     barColor: 'rgba(255,255,255,1)',
                     barBgColor:'rgba(255,255,255,0.7)',
                     barWidth: 10,
-                    initValue: 0,
+                    initValue: 10,
                     roundCorner: true,
                     percentage: true
                 });
@@ -727,7 +727,7 @@
                 loader.addImages(document.querySelector('body'));
                 var startTime = new Date().getTime();
                 var setLoadedPercent = (p)=> {
-                    var pp = Math.ceil(Math.min((new Date().getTime() - startTime) / 25 + 20, p));
+                    var pp = Math.ceil(Math.min((new Date().getTime() - startTime) / 25 + 10, p));
                     radialObj.animate(pp);
                     if (p >= 100) {
                         if (pp >= 100) {
@@ -748,7 +748,7 @@
                 };
                 //监听资源加载进度事件
                 loader.addProgressListener(function (p) {
-                    setLoadedPercent(p.completedCount / p.totalCount * 100);
+                    setLoadedPercent(Math.max(10,p.completedCount / p.totalCount * 100));
                 }.bind(this));
                 loader.start();
             },
