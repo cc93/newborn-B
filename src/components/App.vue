@@ -429,17 +429,16 @@
         top: 10px;
     }
 
-
 </style>
 <template>
     <div class="app">
+        <div class="block" :style="{display:isPortrait? 'none':'block'}">
+            <p class="block-text pa">请使用竖屏浏览</p>
+        </div>
         <div class="loading" :style="{height:isLoadComplete? '0':'100%'}">
             <img class="loading-title pa" src="http://static.unicef.cn/201610cwh5/images/img_0.png" alt="">
             <img class="loading-cloud pa" src="http://static.unicef.cn/201610cwh5/images/img_1.png" alt="">
             <div id="indicatorContainer" class="loading-bar pa"></div>
-        </div>
-        <div class="block" :style="{display:isPortrait? 'none':'block'}">
-            <p class="block-text pa">请使用竖屏浏览</p>
         </div>
         <div class="stage" v-el:stage
              @touchmove="onTouchMove"
@@ -694,12 +693,17 @@
         },
         methods: {
             initBlock(){
+                var everLandscape = 0;
                 var onresize = ()=>{
                     var windowSize = Smart.Utils.windowSize();
                     if (windowSize.width < windowSize.height) {
                         this.isPortrait = true;
+                        if(everLandscape){
+                            location.reload();
+                        }
                     } else {
                         this.isPortrait = false;
+                        everLandscape = 1;
                     }
                 };
                 Smart.Event.windowEvent('resize', onresize);
