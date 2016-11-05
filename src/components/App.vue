@@ -19,6 +19,7 @@
         position: relative;
         overflow-y: scroll;
         overflow-x: hidden;
+        opacity:0;
     }
 
     .loading {
@@ -441,6 +442,7 @@
             <div id="indicatorContainer" class="loading-bar pa"></div>
         </div>
         <div class="stage" v-el:stage
+             :style="{opacity:isLoadComplete? 1:0}"
              @touchmove="onTouchMove"
              @scroll="computeCurrentPage">
 

@@ -57,7 +57,7 @@
 
 </style>
 <template>
-    <div class="audio-player" @click="isPlay=!isPlay" v-el:player>
+    <div class="audio-player" @click="onPlayerClick" v-el:player>
         <slot></slot>
         <img src="../../img/6_line1.png" alt="" class="audio-player-blue-box pa">
         <img src="../../img/6_line2.png" alt="" class="audio-player-white-box pa">
@@ -67,7 +67,7 @@
             <img src="../../img/6_s3.png" alt="" class="audio-player-sound-wave2 pa" v-show="soundWaveFrame>=3">
             <img src="../../img/6_s4.png" alt="" class="audio-player-sound-wave3 pa" v-show="soundWaveFrame>=4">
         </div>
-        <audio :id="audioId" autoplay @play="onPlay" @ended="onEnded">
+        <audio v-el:myaudio :id="audioId" autoplay @play="onPlay" @ended="onEnded">
             <source :src="src" type="audio/mpeg">
             Your browser does not support HTML5 audio.
         </audio>
@@ -107,7 +107,7 @@
         data: function () {
             return {
                 audioEl: null,
-                audioId: 'audio-player-' + (new Date().getTime() + Math.floor(Math.random() * 1000)),
+                audioId: 'audio-player-' + (new Date().getTime() + Math.floor(Math.random() * 1000000)),
                 currentTimeStr: '0:00',
                 totalTimeStr: 0,
                 progress: 0,    //[0,1]
@@ -118,7 +118,6 @@
         },
         watch: {
             'isPlay': function (isPlay) {
-                alert('isPlay = ' + isPlay)
                 if (isPlay) {
                     this.doPlay();
                 } else {
@@ -138,10 +137,15 @@
             }
         },
         methods: {
+            onPlayerClick(){
+                this.isPlay=!this.isPlay;
+            },
             initAudio(){
-                this.audioEl = document.getElementById(this.audioId);
+//                this.audioEl = document.getElementById(this.audioId);
+                this.audioEl = this.$els.myaudio;
+                this.audioEl.load();
+                //在audio标签加入autoplay,然后在onplay中实际控制play or not play, 解决某些机型不能autoplay或不能进入oncanplay函数的坑
                 this.audioEl.oncanplay = function () {
-//                    alert('audio canplay!');
                     this.audioEl.pause();
                 }.bind(this);
             },
@@ -163,32 +167,26 @@
                     this.playingAudioVm.isPlay = false
                 }
                 this.audioEl.play();
-                this.audioEl.currentTime = 1;
-                setTimeout(()=>{
-                    alert('paused = ' + this.audioEl.paused);
-                    if (this.audioEl.paused) {
-                        this.isPlay = false;
-                        //需要异步线程，否则函数栈堆积容易卡死
-                        setTimeout(()=> {
-                            this.isPlay = true;
-                        }, 200);
-                    } else {
-                        //更新播放时间
-                        this.currentTimeUpdateIntervalId = setInterval(()=> {
-                            //update current time
-                            this.progress = this.audioEl.currentTime / this.duration;
-                            //当前播放时间为倒计时
-                            this.currentTimeStr = this.formatTime(this.duration - this.audioEl.currentTime);
-                        }, 100);
-                        //更新声音波纹动画帧
-                        this.soundWaveIntervalId = setInterval(()=> {
-                            this.soundWaveFrame++;
-                            if (this.soundWaveFrame > 4) {
-                                this.soundWaveFrame = 1;
-                            }
-                        }, 300);
-                    }
-                },1000);
+                //某些机型点击一次不能播放，要做检测
+                if (this.audioEl.paused) {
+                    this.isPlay = false;
+                    this.audioEl.load();
+                } else {
+                    //更新播放时间
+                    this.currentTimeUpdateIntervalId = setInterval(()=> {
+                        //update current time
+                        this.progress = this.audioEl.currentTime / this.duration;
+                        //当前播放时间为倒计时
+                        this.currentTimeStr = this.formatTime(this.duration - this.audioEl.currentTime);
+                    }, 100);
+                    //更新声音波纹动画帧
+                    this.soundWaveIntervalId = setInterval(()=> {
+                        this.soundWaveFrame++;
+                        if (this.soundWaveFrame > 4) {
+                            this.soundWaveFrame = 1;
+                        }
+                    }, 300);
+                }
             },
             reset(){
                 //停止更新播放时间，声波动画帧
