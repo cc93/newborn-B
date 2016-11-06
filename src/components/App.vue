@@ -441,7 +441,7 @@
             <img class="loading-cloud pa" src="http://static.unicef.cn/201610cwh5/images/img_1.png" alt="">
             <div id="indicatorContainer" class="loading-bar pa"></div>
         </div>
-        <div class="stage" v-el:stage
+        <div class="stage"
              :style="{opacity:isLoadComplete? 1:0}"
              @touchmove="onTouchMove"
              @scroll="computeCurrentPage">
@@ -653,21 +653,6 @@
             'timeline': Timeline,
             'audio-player': AudioPlayer,
         },
-        directives: {
-            'trans': {
-                update: function (val) {
-                    var className = this.el.className;
-                    var str = className.match(/\b([0-9A-Za-z-]+)-transition\b/g);
-                    var transName = RegExp.$1;
-                    var cssObj = val;
-                    var ext = cssObj.ext || '%';     //默认单位是px
-                    delete cssObj.ext;
-                    Smart._.each(cssObj, function (v, k) {
-                        Smart.Css.createSmartCssStyle('.' + transName + '-' + k, v, ext);
-                    });
-                }
-            }
-        },
         data(){
             return {
                 isLoadComplete: false,
@@ -675,7 +660,6 @@
                 currentPage: 0,
                 totalPages: 10,
                 pageY: [],
-                stageEl: null,
                 scrollBlocked: false,
                 registeredHref: 'http://www.baidu.cn/',
                 sponseHref: 'http://www.unicef.cn/cn/',
@@ -686,7 +670,6 @@
         ready(){
             this.initBlock();
             this.loading();
-            this.stageEl = this.$els.stage;
             var factor = 0.5;
             //factor=1/2
             //上一页的后1/2 到 这一页的前1/2  是 这一页
@@ -765,10 +748,10 @@
                 }
                 return pageY;
             },
-            computeCurrentPage(){
+            computeCurrentPage(e){
+                var scrollY = e.target.scrollTop;
                 if (!this.scrollBlocked) {
                     this.scrollBlocked = true;
-                    var scrollY = this.stageEl.scrollTop;
                     //因为只有前3页Timeline用到了currentPage变量来触发，所以只要检测前3页
                     for (var i = 1; i <= 3; i++) {
                         if (scrollY >= this.pageY[i - 1] && scrollY < this.pageY[i]) {
