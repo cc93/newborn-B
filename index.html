@@ -7,7 +7,25 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-touch-fullscreen" content="yes">
     <meta name="format-detection" content="telephone=no,email=no">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width">
+    <!-- 屏幕适配的js，方式：设置viewport的initial-scale完成整体缩放 -->
+    <script>
+        ;(function (win) {
+            var doc = win.document;
+            var docEl = doc.documentElement;
+            //设计稿的尺寸
+            var docWidth = 750;
+            var docHeight = 1334;
+            //实际的屏幕尺寸
+            var screenWidth = docEl.getBoundingClientRect().width;
+            var screenHeight = docEl.getBoundingClientRect().height;
+            //缩放大小，宽度占满
+            var scale =  screenWidth / docWidth;
+            var metaEl = doc.querySelector('meta[name="viewport"]');
+            metaEl.setAttribute('content', 'width=device-width,initial-scale=' + scale + ', maximum-scale=' + scale + ', minimum-scale=' + scale + ', user-scalable=no');
+        })(window);
+    </script>
+    <!-- /屏幕适配的js，方式：设置viewport的initial-scale完成整体缩放 -->
 
     <!-- /basic styles -->
     <link rel="stylesheet" href="./css/base.css">

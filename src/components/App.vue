@@ -441,7 +441,7 @@
         <div class="block" :style="{display:isPortrait? 'none':'block'}">
             <p class="block-text pa">请使用竖屏浏览</p>
         </div>
-        <div class="wrapper" v-auto-scale="{width:750}">
+        <div class="wrapper">
             <div class="loading" :style="{opacity:isLoadComplete? 0:1}">
                 <img class="loading-title pa" src="http://static.unicef.cn/201610cwh5/images/img_0.png" alt="">
                 <img class="loading-cloud pa" src="http://static.unicef.cn/201610cwh5/images/img_1.png" alt="">
@@ -657,25 +657,6 @@
             'timeline': Timeline,
             'audio-player': AudioPlayer,
         },
-        directives: {
-            'auto-scale': {
-                update: function (val) {
-                    var el = this.el;
-                    var width = val.width;
-                    var onresize = ()=> {
-                        var windowSize = Smart.Utils.windowSize();
-                        var winWidth = windowSize.width;
-                        var winHeight = windowSize.height;
-                        //缩放
-                        var newScale = winWidth / width;            //scaleX,scaleY
-                        var cssSmartObj = {scale: newScale, 'transform-origin': '0 0'};
-                        Smart.Css.smartCss(el, cssSmartObj, 'px');
-                    };
-                    Smart.Event.windowEvent('resize', onresize);
-                    onresize();
-                }
-            }
-        },
         data(){
             return {
                 isLoadComplete: false,
@@ -701,12 +682,22 @@
         },
         methods: {
             initBlock(){
+                var first = '';
                 //竖屏浏览提醒
-                var toggleBlock = ()=>{
+                var toggleBlock = ()=> {
                     var windowSize = Smart.Utils.windowSize();
                     if (windowSize.width < windowSize.height) {
+                        if(first===''){
+                            first = 'portrait';
+                        }
+                        if(first==='landscape'){
+                            location.reload();
+                        }
                         this.isPortrait = true;
                     } else {
+                        if(first===''){
+                            first = 'landscape';
+                        }
                         this.isPortrait = false;
                     }
                 };
