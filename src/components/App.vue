@@ -11,8 +11,6 @@
         width: 100%;
         height: 100%;
         position: relative;
-        overflow-y: scroll;
-        -webkit-overflow-scrolling: touch;
     }
 
     .wrapper {
@@ -436,7 +434,7 @@
 
 </style>
 <template>
-    <div class="app" @scroll="computeCurrentPage">
+    <div class="app"  @touchmove="onTouchMove">
         <div class="block" :style="{display:isPortrait? 'none':'block'}">
             <p class="block-text pa">请使用竖屏浏览</p>
         </div>
@@ -671,6 +669,7 @@
             }
         },
         ready(){
+            this.initScrollTop();
             this.initBlock();
             this.loading();
             var factor = 0.5;
@@ -680,6 +679,24 @@
             this.pageY = this.getPageY(factor, this.totalPages);
         },
         methods: {
+            initScrollTop(){
+                var getScrollTop = ()=>{
+                    var scrollTop = document.body.scrollTop | document.documentElement.scrollTop;
+                    // console.log('scrollTop= ' + scrollTop);
+                    if (!this.scrollBlocked) {
+                        this.scrollBlocked = true;
+                        //因为只有前3页Timeline用到了currentPage变量来触发，所以只要检测前3页
+                        for (var i = 1; i <= 3; i++) {
+                            if (scrollTop >= this.pageY[i - 1] && scrollTop < this.pageY[i]) {
+                                this.currentPage = i;
+                                break;
+                            }
+                        }
+                        this.scrollBlocked = false;
+                    }
+                };
+                Smart.Event.windowEvent('scroll', getScrollTop);
+            },
             initBlock(){
                 var first = '';
                 //竖屏浏览提醒
@@ -756,20 +773,6 @@
                     pageY.push(Math.floor(totalY - this.pagesHeight[i] * factor))
                 }
                 return pageY;
-            },
-            computeCurrentPage(e){
-                var scrollTop = e.target.scrollTop;
-                if (!this.scrollBlocked) {
-                    this.scrollBlocked = true;
-                    //因为只有前3页Timeline用到了currentPage变量来触发，所以只要检测前3页
-                    for (var i = 1; i <= 3; i++) {
-                        if (scrollTop >= this.pageY[i - 1] && scrollTop < this.pageY[i]) {
-                            this.currentPage = i;
-                            break;
-                        }
-                    }
-                    this.scrollBlocked = false;
-                }
             },
             onTouchMove(){
                 this.scrollBlocked = false;
