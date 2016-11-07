@@ -11,6 +11,8 @@
         width: 100%;
         height: 100%;
         position: relative;
+        overflow-y: scroll;
+        -webkit-overflow-scrolling: touch;
     }
 
     .wrapper {
@@ -23,13 +25,10 @@
 
     .stage {
         width: 100%;
-        height: 100%;
         left:0;
         top:0;
         position: absolute;
-        overflow-y: scroll;
-        overflow-x: hidden;
-        opacity: 0;
+        display: none;
     }
 
     .loading {
@@ -39,17 +38,16 @@
         left: 0;
         top: 0;
         z-index: 50;
-        overflow: hidden;
         background: url(http://static.unicef.cn/201610cwh5/images/bg_0.jpg);
         background-size: cover;
-        -webkit-transition: height .5s;
-        transition: height .5s;
+        -webkit-transition: opacity .5s;
+        transition: opacity .5s;
     }
 
     .loading-title {
         width: 100%;
         left: 0;
-        top: 10%;
+        bottom: 60%;
         z-index: 5;
     }
 
@@ -73,7 +71,6 @@
         left: 0;
         top: 0;
         z-index: 99;
-        overflow: hidden;
         display: none;
         background: rgba(255, 255, 255, .9);
     }
@@ -104,7 +101,6 @@
 
     .p1-pic1-box {
         height: 434px;
-        overflow: hidden;
     }
 
     .logo {
@@ -153,7 +149,6 @@
 
     .p2-pic1-box {
         height: 501px;
-        overflow: hidden;
     }
 
     .p2-timeline {
@@ -401,7 +396,7 @@
     }
 
     #page10 {
-        height: 1460px;
+        height: 1160px;
     }
 
     .p10-copy3 {
@@ -421,7 +416,7 @@
 
     .p10-foot {
         width: 100%;
-        height: 720px;
+        height: 420px;
         left: 0;
         top: 750px;
     }
@@ -442,21 +437,18 @@
 
 </style>
 <template>
-    <div class="app">
+    <div class="app" @scroll="computeCurrentPage">
         <div class="block" :style="{display:isPortrait? 'none':'block'}">
             <p class="block-text pa">请使用竖屏浏览</p>
         </div>
         <div class="wrapper" v-auto-scale="{width:750}">
-            <div class="loading" :style="{height:isLoadComplete? '0':'100%'}">
+            <div class="loading" :style="{opacity:isLoadComplete? 0:1}">
                 <img class="loading-title pa" src="http://static.unicef.cn/201610cwh5/images/img_0.png" alt="">
                 <img class="loading-cloud pa" src="http://static.unicef.cn/201610cwh5/images/img_1.png" alt="">
                 <div id="indicatorContainer" class="loading-bar pa"></div>
             </div>
             <div class="stage"
-                 :style="{opacity:isLoadComplete? 1:0}"
-                 @touchmove="onTouchMove"
-                 @scroll="computeCurrentPage">
-
+                 :style="{display:isLoadComplete? 'block':'none'}">
                 <div id="page1" class="page bg-lightblue">
                     <div class="p1-head">
                         <img src="../../img/logo.png" alt="" class="logo pa">
@@ -776,12 +768,12 @@
                 return pageY;
             },
             computeCurrentPage(e){
-                var scrollY = e.target.scrollTop;
+                var scrollTop = e.target.scrollTop;
                 if (!this.scrollBlocked) {
                     this.scrollBlocked = true;
                     //因为只有前3页Timeline用到了currentPage变量来触发，所以只要检测前3页
                     for (var i = 1; i <= 3; i++) {
-                        if (scrollY >= this.pageY[i - 1] && scrollY < this.pageY[i]) {
+                        if (scrollTop >= this.pageY[i - 1] && scrollTop < this.pageY[i]) {
                             this.currentPage = i;
                             break;
                         }
