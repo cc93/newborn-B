@@ -37,7 +37,6 @@
         position: absolute;
         left: 0;
         top: 0;
-        z-index: 50;
         background: url(http://static.unicef.cn/201610cwh5/images/bg_0.jpg);
         background-size: cover;
         -webkit-transition: opacity .5s;
@@ -665,7 +664,7 @@
                 totalPages: 10,
                 pageY: [],
                 scrollBlocked: false,
-                registeredHref: 'http://www.baidu.cn/',
+                registeredHref: 'https://www.baidu.com/',
                 sponseHref: 'http://www.unicef.cn/cn/',
                 playingAudioVm: null,
                 pagesHeight: [0, 1206, 1165, 967, 888, 1050, 950, 1116, 1201, 1422, 1133]
