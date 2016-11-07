@@ -401,7 +401,7 @@
     }
 
     #page10 {
-        height: 1160px;
+        height: 1460px;
     }
 
     .p10-copy3 {
@@ -421,7 +421,7 @@
 
     .p10-foot {
         width: 100%;
-        height: 420px;
+        height: 720px;
         left: 0;
         top: 750px;
     }
