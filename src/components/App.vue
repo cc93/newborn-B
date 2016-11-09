@@ -443,7 +443,7 @@
 <template>
     <div class="app" @touchmove="onTouchMove">
         <div class="block" :style="{display:(isBlockCancled||isPortrait)? 'none':'block'}">
-            <p class="block-text pa">请使用竖屏浏览</p>
+            <p class="block-text pa">请竖屏查看</p>
             <div class="block-btn pa" @click="isBlockCancled=true">知道了</div>
         </div>
         <div class="loading" :style="{display:isLoadComplete? 'none':'block'}">
