@@ -28,7 +28,7 @@
         left: 0;
         top: 0;
         background: url(http://static.unicef.cn/201610cwh5/images/bg_0.jpg) no-repeat;
-        background-size: contain;
+        background-size: cover;
     }
 
     .loading-title {
