@@ -119,7 +119,7 @@
 
     .p1-timeline {
         left: 286px;
-        top: 614px;
+        top: 626px;
     }
 
     .p1-copy1 {
@@ -157,7 +157,12 @@
 
     .p2-timeline {
         left: 286px;
-        top: 554px;
+        top: 582px;
+    }
+
+    .p3-timeline {
+        left: 286px;
+        top: 569px;
     }
 
     .p2-copy1 {
@@ -365,8 +370,7 @@
     }
 
     .p9-pic1 {
-        width: 690px;
-        left: 30px;
+        width: 750px;
         top: 175px;
         z-index: -2;
     }
@@ -497,6 +501,7 @@
                     <a :href="sponseHref">
                         <div class="p2-sponsor-text pa">
                             支持这一分钟的改变
+
                         </div>
                     </a>
                 </div>
@@ -507,7 +512,7 @@
                 </div>
                 <div class="p3-body">
                     <img src="../../img/3_pic1.jpg" alt="">
-                    <timeline class="p2-timeline pa"
+                    <timeline class="p3-timeline pa"
                               :start-time="40"
                               :end-time="60"
                               :run="currentPage==3">
